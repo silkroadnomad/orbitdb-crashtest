@@ -60,7 +60,7 @@ async function main() {
     }
 
     // Scan every 5 minutes
-    const scanInterval = 5 * 60 * 1000
+    const scanInterval = 10*1000;//5 * 60 * 1000
     
     async function scan() {
         try {

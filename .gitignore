@@ -2,3 +2,4 @@
 node_modules/
 helia-*/
 orbitdb/
+nohup.out
