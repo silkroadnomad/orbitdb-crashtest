@@ -38,30 +38,9 @@ export async function updateDailyNameOpsFile(orbitdb, nameOpUtxos, blockDate, bl
         const docId = `nameops-${blockDate}`;
         console.log(`Document ID: ${docId}`);
 
-        const existingDoc = await db.get(docId);
-        console.log("Existing document retrieved", existingDoc);
-
-        const existingNameOps = existingDoc?.value?.nameOps || [];
-        console.log(`Existing name operations count: ${existingNameOps.length}`);
-
-        const allNameOps = [...existingNameOps, ...nameOpUtxos];
-        console.log(`Total name operations count after merge: ${allNameOps.length}`);
-
-        // Create a map using a composite key of relevant fields
-        const uniqueMap = new Map();
-        allNameOps.forEach(nameOp => {
-            const key = `${nameOp.nameId}-${nameOp.nameValue}`;
-            if (!uniqueMap.has(key) || uniqueMap.get(key).blocktime < nameOp.blocktime) {
-                uniqueMap.set(key, nameOp);
-            }
-        });
-
-        const uniqueNameOps = Array.from(uniqueMap.values());
-        console.log(`Unique name operations count: ${uniqueNameOps.length}`);
-
         await db.put({
             _id: docId,
-            nameOps: uniqueNameOps,
+            nameOps: nameOpUtxos,
             blockHeight,
             blockDate
         });
