@@ -46,9 +46,7 @@ export async function updateDailyNameOpsFile(orbitdb, nameOpUtxos, blockDate, bl
         });
 
         console.log(`Document updated in OrbitDB: ${docId}`, {
-            totalOps: uniqueNameOps.length,
             newOps: nameOpUtxos.length,
-            existingOps: existingNameOps.length
         });
         return docId;
 
