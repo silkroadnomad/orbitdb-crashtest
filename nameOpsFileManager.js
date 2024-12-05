@@ -1,5 +1,4 @@
-import { IPFSAccessController } from '@orbitdb/core'
-import { LevelStorage } from '@orbitdb/leveldb'
+import { IPFSAccessController,LevelStorage } from '@orbitdb/core'
 
 let db = null
 
