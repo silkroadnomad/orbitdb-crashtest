@@ -1,4 +1,4 @@
-# Orbit Crash Test
+# OrbitDB Crash Test
 
 This repository was created to investigate and address a critical issue with OrbitDB, where the database crashes when attempting to read data before inserting new data. The problem manifests after approximately 15 minutes of operation, particularly when handling a large number of records. The crash results in the inability to read or write data, and the process becomes difficult to terminate without using forceful methods like `kill -s9`.
 
