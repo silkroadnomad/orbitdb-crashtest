@@ -1,4 +1,5 @@
 import { IPFSAccessController } from '@orbitdb/core'
+import { LevelStorage } from '@orbitdb/leveldb'
 
 let db = null
 
@@ -14,12 +15,23 @@ export async function getOrCreateDB(orbitdb, dbName) {
         return db
     }
 
+    // Custom storage paths
+    const path = "./orbitdb-storage/"
+    const entryStorage = await LevelStorage({ path: `${path}/entries` })
+    const headsStorage = await LevelStorage({ path: `${path}/heads` })
+    const indexStorage = await LevelStorage({ path: `${path}/index` })
+
     db = await orbitdb.open(dbName, {
         type: 'documents',
         create: true,
         overwrite: false,
         directory: './orbitdb/nameops',
-        AccessController: IPFSAccessController({ write: [orbitdb.identity.id] })
+        AccessController: IPFSAccessController({ write: [orbitdb.identity.id] }),
+        storage: {
+            entryStorage,
+            headsStorage,
+            indexStorage
+        }
     })
 
     console.log(`Opened OrbitDB: ${dbName}`)
