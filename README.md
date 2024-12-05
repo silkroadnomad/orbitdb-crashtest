@@ -1,6 +1,14 @@
 # Orbit Crash Test
 
-This project is a test setup for using OrbitDB with custom storage backends, integrated with a mock blockchain scanning process. It utilizes Helia, Libp2p, and various other libraries to simulate a decentralized database environment.
+This repository was created to investigate and address a critical issue with OrbitDB, where the database crashes when attempting to read data before inserting new data. The problem manifests after approximately 15 minutes of operation, particularly when handling a large number of records. The crash results in the inability to read or write data, and the process becomes difficult to terminate without using forceful methods like `kill -s9`.
+
+The project aims to replicate the crash scenario without using IPFS storage, as observed in various environments, including Linux and macOS. The issue is exacerbated by frequent write operations (every 500 milliseconds).
+
+An assumption of a similar issue was observed in another project, where a `del` operation executed right before a `put` operation resulted in an inaccessible OrbitDB. This behavior was noted in the [deContact project](https://github.com/silkroadnomad/deContact/blob/14bf22110e348eac16ae7407f258c6e4b5d76bd3/src/lib/network/p2p-operations.js#L476), suggesting potential timing issues that could lead to database instability.
+
+The repository includes a version of the code that operates without IPFS storage, as seen in the [nameOpsFileManager.js](https://github.com/silkroadnomad/orbitdb-crashtest/blob/without-ipfs-storage/nameOpsFileManager.js#L23). The goal is to identify the root cause of the crash and explore potential solutions to improve the stability and reliability of OrbitDB in high-load scenarios.
+
+For more details on the issue and ongoing experiments, refer to the [GitHub repository](https://github.com/silkroadnomad/orbitdb-crashtest).
 
 ## Table of Contents
 
@@ -33,7 +41,7 @@ This project is a test setup for using OrbitDB with custom storage backends, int
    Create a `.env` file in the root directory and add your private key:
 
    ```plaintext
-   RELAY_PRIVATE_KEY=your_private_key_here
+   RELAY_PRIVATE_KEY=your-test-libp2p-private-key
    ```
 
    If you don't have a private key, the application will generate one for you on the first run.
