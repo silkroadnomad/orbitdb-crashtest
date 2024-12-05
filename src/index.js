@@ -59,37 +59,36 @@ async function main() {
         blockchainHeaders_subscribe: async () => Math.floor(Date.now() / 1000)
     }
 
-    let scanInterval = 500; // Initial scan interval in milliseconds
-
     async function scan() {
-        try {
-            const startTime = Date.now();
+        while (true) {
+            try {
+                const startTime = Date.now();
 
-            await scanBlockchainForNameOps(mockElectrumClient, helia, orbitdb);
+                await scanBlockchainForNameOps(mockElectrumClient, helia, orbitdb);
 
-            const endTime = Date.now();
-            const executionTime = endTime - startTime;
+                const endTime = Date.now();
+                const executionTime = endTime - startTime;
 
-            // Adjust the scan interval if the execution time exceeds the current interval
-            if (executionTime > scanInterval) {
-                scanInterval = executionTime + 100; // Add a buffer of 100ms
-                console.log(`Scan interval increased to ${scanInterval}ms due to longer execution time.`);
-            } else {
-                scanInterval = 500; // Reset to default if execution is within limits
+                // Log execution time
+                console.log(`Scan execution time: ${executionTime}ms`);
+
+                // Optional: Introduce a delay if needed
+                const delay = Math.max(0, 500 - executionTime); // Ensure non-negative delay
+                if (delay > 0) {
+                    console.log(`Waiting for ${delay}ms before next scan.`);
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+
+            } catch (error) {
+                console.error('Scan error:', error);
+                // If OrbitDB error, log additional details
+                if (error.message.includes('OrbitDB')) {
+                    console.error('OrbitDB state:', {
+                        identity: orbitdb.identity.id,
+                        databases: Array.from(orbitdb.databases.keys())
+                    });
+                }
             }
-
-        } catch (error) {
-            console.error('Scan error:', error);
-            // If OrbitDB error, log additional details
-            if (error.message.includes('OrbitDB')) {
-                console.error('OrbitDB state:', {
-                    identity: orbitdb.identity.id,
-                    databases: Array.from(orbitdb.databases.keys())
-                });
-            }
-        } finally {
-            // Schedule the next scan
-            setTimeout(scan, scanInterval);
         }
     }
 
