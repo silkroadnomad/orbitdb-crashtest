@@ -1,3 +1,4 @@
+import PQueue from 'p-queue';
 import { updateDailyNameOpsFile } from './nameOpsFileManager.js'
 
 function generateMockNameOp(index, date) {
@@ -15,6 +16,9 @@ function generateMockNameOp(index, date) {
     }
 }
 
+// Create a queue with concurrency of 1 to process one task at a time
+const queue = new PQueue({ concurrency: 1 });
+
 export async function scanBlockchainForNameOps(electrumClient, helia, orbitdb) {
     try {
         const height = await electrumClient.blockchainHeaders_subscribe()
@@ -29,7 +33,8 @@ export async function scanBlockchainForNameOps(electrumClient, helia, orbitdb) {
 
         console.log(`Generated ${mockNameOps.length} mock name operations`)
         
-        await updateDailyNameOpsFile(orbitdb, mockNameOps, date, height)
+        // Add the update operation to the queue
+        await queue.add(() => updateDailyNameOpsFile(orbitdb, mockNameOps, date, height));
         
         // Log some stats
         console.log('Scan completed:', {
