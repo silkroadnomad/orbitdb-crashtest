@@ -5,14 +5,15 @@ let db = null
 /**
  * Initialize or get the single OrbitDB instance
  */
-export async function getOrCreateDB(orbitdb) {
+export async function getOrCreateDB(orbitdb, dbName) {
+    if(!dbName) {
+        dbName = 'nameops'
+    }
     console.log("getOrCreateDB", orbitdb.id)
     if (db) {
         return db
     }
 
-    // Open new DB with documents type and access control
-    const dbName = 'nameops'
     db = await orbitdb.open(dbName, {
         type: 'documents',
         create: true,
@@ -35,8 +36,13 @@ export async function updateDailyNameOpsFile(orbitdb, nameOpUtxos, blockDate, bl
         const db = await getOrCreateDB(orbitdb);
         console.log("Database instance retrieved");
 
-        const docId = `nameops-${blockDate}`;
+        const docId = `nameops-${blockDate}-${blockHeight}`;
         console.log(`Document ID: ${docId}`);
+
+        // Calculate total nameOps count before update
+        const allDocsBefore = await db.all();
+        const totalNameOpsBefore = allDocsBefore.reduce((acc, doc) => acc + (doc.value.nameOps ? doc.value.nameOps.length : 0), 0);
+        console.log(`Total nameOps count before update: ${totalNameOpsBefore}`);
 
         await db.put({
             _id: docId,
@@ -44,6 +50,11 @@ export async function updateDailyNameOpsFile(orbitdb, nameOpUtxos, blockDate, bl
             blockHeight,
             blockDate
         });
+
+        // Calculate total nameOps count after update
+        const allDocsAfter = await db.all();
+        const totalNameOpsAfter = allDocsAfter.reduce((acc, doc) => acc + (doc.value.nameOps ? doc.value.nameOps.length : 0), 0);
+        console.log(`Total nameOps count after update: ${totalNameOpsAfter}`);
 
         console.log(`Document updated in OrbitDB: ${docId}`, {
             newOps: nameOpUtxos.length,

@@ -19,7 +19,7 @@ import { prometheusMetrics } from '@libp2p/prometheus-metrics'
 
 dotenv.config();
 
-const bootstrapList = process.env.RELAY_BOOTSTRAP_LIST.split(',');
+const bootstrapList = process.env.RELAY_BOOTSTRAP_LIST?.split(',') || []
 const enableUPnP = process.env.ENABLE_UPNP === 'true'
 
 export function createLibp2pConfig({ keyPair, datastore, listenAddresses, announceAddresses, pubsubPeerDiscoveryTopics, scoreThresholds }) {

@@ -8,8 +8,11 @@
     "@chainsafe/libp2p-gossipsub": "^14.1.0",
     "@chainsafe/libp2p-noise": "^16.0.0",
     "@chainsafe/libp2p-yamux": "^7.0.1",
+    "@libp2p/autonat": "^2.0.12",
     "@libp2p/bootstrap": "^11.0.10",
     "@libp2p/circuit-relay-v2": "^3.1.0",
+    "@libp2p/crypto": "^5.0.6",
+    "@libp2p/dcutr": "^2.0.12",
     "@libp2p/identify": "^3.0.10",
     "@libp2p/kad-dht": "^14.1.0",
     "@libp2p/ping": "^2.0.10",
@@ -18,12 +21,12 @@
     "@libp2p/tcp": "^10.0.11",
     "@libp2p/websockets": "^9.0.11",
     "@multiformats/multiaddr": "^12.3.1",
+    "@orbitdb/core": "^2.4.3",
     "blockstore-level": "^2.0.1",
     "datastore-level": "^11.0.1",
     "dotenv": "^16.4.5",
-    "helia": "^5.1.0",
-    "@orbitdb/core": "^2.4.3",
-    "uint8arrays": "^5.1.0",
-    "@libp2p/crypto": "^5.0.6"
+    "helia": "^5.1.1",
+    "libp2p": "^2.3.1",
+    "uint8arrays": "^5.1.0"
   }
 }
