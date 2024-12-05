@@ -59,26 +59,42 @@ async function main() {
         blockchainHeaders_subscribe: async () => Math.floor(Date.now() / 1000)
     }
 
-    // Scan every 5 minutes
-    const scanInterval = 1*500;//5 * 60 * 1000
-    
+    let scanInterval = 500; // Initial scan interval in milliseconds
+
     async function scan() {
         try {
-            await scanBlockchainForNameOps(mockElectrumClient, helia, orbitdb)
+            const startTime = Date.now();
+
+            await scanBlockchainForNameOps(mockElectrumClient, helia, orbitdb);
+
+            const endTime = Date.now();
+            const executionTime = endTime - startTime;
+
+            // Adjust the scan interval if the execution time exceeds the current interval
+            if (executionTime > scanInterval) {
+                scanInterval = executionTime + 100; // Add a buffer of 100ms
+                console.log(`Scan interval increased to ${scanInterval}ms due to longer execution time.`);
+            } else {
+                scanInterval = 500; // Reset to default if execution is within limits
+            }
+
         } catch (error) {
-            console.error('Scan error:', error)
+            console.error('Scan error:', error);
             // If OrbitDB error, log additional details
             if (error.message.includes('OrbitDB')) {
                 console.error('OrbitDB state:', {
                     identity: orbitdb.identity.id,
                     databases: Array.from(orbitdb.databases.keys())
-                })
+                });
             }
+        } finally {
+            // Schedule the next scan
+            setTimeout(scan, scanInterval);
         }
     }
 
-    setInterval(scan, scanInterval)
-    await scan() // Initial scan
+    // Start the initial scan
+    scan();
 
     // Cleanup handlers
     process.on('SIGINT', cleanup)

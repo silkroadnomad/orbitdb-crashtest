@@ -13,6 +13,7 @@ export async function getOrCreateDB(orbitdb, dbName) {
     if (db) {
         return db
     }
+    console.log("creating a new db", orbitdb.id)
 
     // Custom storage paths
     const path = "./orbitdb-storage/"
