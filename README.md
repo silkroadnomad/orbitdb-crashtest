@@ -80,11 +80,12 @@ This will initiate the blockchain scanning process and update the OrbitDB with m
 
 The project relies on the following key dependencies:
 
-- `@orbitdb/core`: OrbitDB core library.
-- `libp2p`: Modular networking stack.
-- `helia`: IPFS implementation.
-- `blockstore-level` and `datastore-level`: LevelDB storage backends.
-- `dotenv`: Environment variable management.
+- `@orbitdb/core`: OrbitDB core library, version `^2.4.3`.
+- `libp2p`: Modular networking stack, version `^2.3.1`.
+- `helia`: IPFS implementation, version `^5.1.1`.
+- `blockstore-level`: LevelDB storage backend, version `^2.0.1`.
+- `datastore-level`: LevelDB storage backend, version `^11.0.1`.
+- `dotenv`: Environment variable management, version `^16.4.5`.
 
 For a complete list, see the `package.json` file.
 
