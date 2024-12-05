@@ -104,8 +104,20 @@ async function main() {
         console.log('Shutting down...')
         try {
             await orbitdb.stop()
+            console.log('OrbitDB stopped')
+
+            await helia.stop()
+            console.log('Helia stopped')
+
+            await helia.libp2p.stop()
+            console.log('Libp2p stopped')
+
             await blockstore.close()
+            console.log('Blockstore closed')
+
             await datastore.close()
+            console.log('Datastore closed')
+
             console.log('Cleanup completed')
         } catch (error) {
             console.error('Cleanup error:', error)
