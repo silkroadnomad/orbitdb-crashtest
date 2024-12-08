@@ -72,13 +72,6 @@ async function main() {
                 // Log execution time
                 console.log(`Scan execution time: ${executionTime}ms`);
 
-                // Optional: Introduce a delay if needed
-                const delay = Math.max(0, 500 - executionTime); // Ensure non-negative delay
-                if (delay > 0) {
-                    console.log(`Waiting for ${delay}ms before next scan.`);
-                    await new Promise(resolve => setTimeout(resolve, delay));
-                }
-
             } catch (error) {
                 console.error('Scan error:', error);
                 // If OrbitDB error, log additional details
