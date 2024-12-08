@@ -31,7 +31,7 @@ export async function scanBlockchainForNameOps(electrumClient, helia, orbitdb) {
         
         // Add the update operation to the queue
         // await queue.add(() => updateDailyNameOpsFile(orbitdb, mockNameOps, date, height));
-        updateDailyNameOpsFile(orbitdb, mockNameOps, date, height)
+        await updateDailyNameOpsFile(orbitdb, mockNameOps, date, height)
         
         // Log some stats
         console.log('Scan completed:', {

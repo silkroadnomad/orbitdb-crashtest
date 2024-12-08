@@ -16,22 +16,22 @@ export async function getOrCreateDB(orbitdb, dbName) {
     console.log("creating a new db", orbitdb.id)
 
     // Custom storage paths
-    const path = "./orbitdb-storage/"
-    const entryStorage = await LevelStorage({ path: `${path}/entries` })
-    const headsStorage = await LevelStorage({ path: `${path}/heads` })
-    const indexStorage = await LevelStorage({ path: `${path}/index` })
-
+    // const path = "./orbitdb-storage/"
+    // const entryStorage = await LevelStorage({ path: `${path}/entries` })
+    // const headsStorage = await LevelStorage({ path: `${path}/heads` })
+    // const indexStorage = await LevelStorage({ path: `${path}/index` })
+    console.log("opening db", orbitdb.id)
     db = await orbitdb.open(dbName, {
         type: 'documents',
         create: true,
-        overwrite: false,
+        overwrite: true,
         directory: './orbitdb/nameops',
         AccessController: IPFSAccessController({ write: [orbitdb.identity.id] }),
-        storage: {
-            entryStorage,
-            headsStorage,
-            indexStorage
-        }
+        // storage: {
+            // entryStorage,
+            // headsStorage,
+            // indexStorage
+        // }
     })
 
     console.log(`Opened OrbitDB: ${dbName}`)
